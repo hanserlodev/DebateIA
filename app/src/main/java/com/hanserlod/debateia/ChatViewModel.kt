@@ -444,37 +444,93 @@ class ChatViewModel(
                 
                 // Crear análisis simple basado en conteo y detección
                 val totalMensajes = mensajesUsuarioDebate.size
-                val promedioLongitud = mensajesUsuarioDebate.sumOf { it.length } / totalMensajes.toDouble()
+                val promedioLongitud = if (totalMensajes > 0) {
+                    mensajesUsuarioDebate.sumOf { it.length } / totalMensajes.toDouble()
+                } else 0.0
                 
                 // Ajustar puntuaciones basándose en errores perdidos
+                val erroresDetectados = erroresAprovechados.count { error -> error.fueAprovechado }
                 val erroresPerdidos = erroresAprovechados.count { error -> !error.fueAprovechado }
-                val penalizacionErrores = (erroresPerdidos.toFloat() * 0.5f).coerceAtMost(3.0f)
+                val totalErrores = erroresAprovechados.size
                 
-                // Puntuaciones básicas (convertir a Float)
-                val puntuacionBase = if (falaciasDetectadas.isEmpty()) 8.5f else 6.0f
-                val puntuacionGeneral = (puntuacionBase - penalizacionErrores).coerceAtLeast(1.0f)
+                // Calcular porcentaje de detección
+                val porcentajeDeteccion = if (totalErrores > 0) {
+                    (erroresDetectados.toFloat() / totalErrores) * 100
+                } else 100f
                 
-                val capacidadRespuesta = (totalMensajes / 3.0).coerceIn(1.0, 10.0).toFloat()
-                val usoFuentes = 5.0f // Neutro sin análisis profundo
-                val calidadArgumentacion = if (promedioLongitud > 100) 7.0f else 5.0f
-                val coherencia = if (falaciasDetectadas.size <= 2) 8.0f else 5.0f
-                val profundidad = (promedioLongitud / 50.0).coerceIn(1.0, 10.0).toFloat()
+                // Puntuaciones mejoradas
+                val capacidadRespuesta = ((totalMensajes / 6.0) * 10.0).coerceIn(1.0, 10.0).toFloat()
+                
+                val usoFuentes = 6.0f // Neutral por defecto
+                
+                val calidadArgumentacion = when {
+                    promedioLongitud > 300 -> 9.0f
+                    promedioLongitud > 150 -> 7.5f
+                    promedioLongitud > 80 -> 6.0f
+                    else -> 4.0f
+                }
+                
+                val coherencia = when {
+                    falaciasDetectadas.isEmpty() -> 9.5f
+                    falaciasDetectadas.size <= 1 -> 7.5f
+                    falaciasDetectadas.size <= 3 -> 6.0f
+                    else -> 4.0f
+                }
+                
+                val profundidad = ((promedioLongitud / 50.0).coerceIn(1.0, 10.0)).toFloat()
+                
+                // Bonus por detectar errores de la IA
+                val bonusDeteccion = (porcentajeDeteccion / 10).coerceAtMost(10f)
+                
+                val puntuacionGeneral = ((capacidadRespuesta + calidadArgumentacion + coherencia + profundidad + bonusDeteccion) / 5.0f)
+                    .coerceIn(1.0f, 10.0f)
                 
                 // Generar recomendaciones incluyendo las de errores
                 val recomendaciones = mutableListOf<String>()
                 
-                // Recomendaciones por errores intencionales
+                // Recomendaciones por detección de errores
+                if (totalErrores > 0) {
+                    when {
+                        porcentajeDeteccion >= 80 -> {
+                            recomendaciones.add("🌟 ¡Excelente! Detectaste ${erroresDetectados} de ${totalErrores} errores de la IA (${porcentajeDeteccion.toInt()}%)")
+                        }
+                        porcentajeDeteccion >= 50 -> {
+                            recomendaciones.add("👍 Detectaste ${erroresDetectados} de ${totalErrores} errores, pero perdiste ${erroresPerdidos} oportunidades")
+                        }
+                        else -> {
+                            recomendaciones.add("⚠️ Solo detectaste ${erroresDetectados} de ${totalErrores} errores. Desarrolla tu escucha crítica")
+                        }
+                    }
+                }
+                
+                // Añadir recomendaciones específicas de errores
                 recomendaciones.addAll(generarRecomendaciones(erroresAprovechados))
                 
-                // Recomendaciones generales
+                // Recomendaciones por falacias
                 if (falaciasDetectadas.isNotEmpty()) {
-                    recomendaciones.add("Evita falacias lógicas en tus argumentos")
+                    val falaciasFrecuentes = falaciasDetectadas.groupBy { it.name }
+                        .maxByOrNull { it.value.size }?.key
+                    recomendaciones.add("⚠️ Cometiste ${falaciasDetectadas.size} falacia(s). La más común: ${falaciasFrecuentes ?: "N/A"}")
+                } else {
+                    recomendaciones.add("✅ Excelente lógica, sin falacias detectadas")
                 }
-                if (promedioLongitud < 50) {
-                    recomendaciones.add("Desarrolla más tus argumentos con mayor detalle")
+                
+                // Recomendaciones por longitud
+                when {
+                    promedioLongitud < 80 -> {
+                        recomendaciones.add("📝 Desarrolla más tus argumentos. Promedio actual: ${promedioLongitud.toInt()} caracteres")
+                    }
+                    promedioLongitud > 500 -> {
+                        recomendaciones.add("✂️ Argumentos muy extensos. Practica la síntesis")
+                    }
+                    else -> {
+                        recomendaciones.add("👍 Buena extensión de argumentos (${promedioLongitud.toInt()} caracteres)")
+                    }
                 }
-                if (totalMensajes < 3) {
-                    recomendaciones.add("Participa más activamente en el debate")
+                
+                // Recomendaciones por participación
+                if (totalMensajes < 4) {
+                    recomendaciones.add("📢 Participa más activamente. Solo enviaste ${totalMensajes} mensaje(s)")
                 }
                 
                 // Generar retroalimentación completa
@@ -766,47 +822,85 @@ class ChatViewModel(
         val totalErrores = erroresAprovechados.size
         
         val config = _currentSession.value?.debateConfig
+        val porcentajeDeteccion = if (totalErrores > 0) {
+            ((erroresDetectados.toFloat() / totalErrores) * 100).toInt()
+        } else 0
         
         return buildString {
-            appendLine("📊 RETROALIMENTACIÓN DEL DEBATE")
+            appendLine("📊 ANÁLISIS COMPLETO DEL DEBATE")
             appendLine()
-            appendLine("Has participado con $totalMensajes mensajes en este debate de nivel ${config?.nivelDificultad?.nombre ?: "N/A"}.")
+            appendLine("Tema debatido: \"${config?.tema ?: "N/A"}\"")
+            appendLine("Nivel: ${config?.nivelDificultad?.nombre ?: "N/A"}")
+            appendLine("Tu postura: ${config?.posturaUsuario?.nombre ?: "N/A"}")
+            appendLine("Mensajes enviados: $totalMensajes")
             appendLine()
             
+            // Análisis de pensamiento crítico
+            appendLine("🎯 PENSAMIENTO CRÍTICO (Detección de Errores de la IA)")
             if (totalErrores > 0) {
-                appendLine("🎯 OPORTUNIDADES DE APRENDIZAJE:")
-                appendLine("La IA cometió $totalErrores error(es) intencional(es) como parte de tu entrenamiento:")
-                appendLine("• Detectaste: $erroresDetectados")
-                appendLine("• Perdiste: $erroresPerdidos")
+                appendLine("La IA cometió $totalErrores error(es) intencional(es) para entrenar tu análisis crítico:")
+                appendLine()
+                appendLine("✅ Detectados: $erroresDetectados ($porcentajeDeteccion%)")
+                appendLine("❌ Perdidos: $erroresPerdidos")
+                appendLine()
+                
+                when {
+                    porcentajeDeteccion >= 80 -> {
+                        appendLine("🌟 ¡EXCELENTE! Tienes una capacidad de análisis crítico sobresaliente.")
+                        appendLine("Detectaste la mayoría de los errores que cometí intencionalmente.")
+                    }
+                    porcentajeDeteccion >= 50 -> {
+                        appendLine("👍 BIEN. Vas por buen camino, pero hay margen de mejora.")
+                        appendLine("Revisa los errores que dejaste pasar para aprender a identificarlos.")
+                    }
+                    else -> {
+                        appendLine("💪 NECESITAS PRACTICAR MÁS. La mayoría de errores pasaron desapercibidos.")
+                        appendLine("Desarrolla tu escucha activa y cuestiona cada afirmación de la IA.")
+                    }
+                }
                 appendLine()
                 
                 if (erroresPerdidos > 0) {
-                    appendLine("⚠️ OPORTUNIDADES PERDIDAS:")
-                    erroresAprovechados.filter { error -> !error.fueAprovechado }.forEach { error ->
-                        appendLine("• ${error.tipo}: \"${error.argumentoErroneo.take(80)}${if (error.argumentoErroneo.length > 80) "..." else ""}\"")
+                    appendLine("⚠️ OPORTUNIDADES QUE PERDISTE:")
+                    erroresAprovechados.filter { !it.fueAprovechado }.forEach { error ->
+                        appendLine("• ${error.tipo}")
+                        appendLine("  \"${error.argumentoErroneo.take(100)}${if (error.argumentoErroneo.length > 100) "..." else ""}\"")
+                        appendLine()
                     }
-                    appendLine()
                 }
                 
                 if (erroresDetectados > 0) {
-                    appendLine("✅ BIEN DETECTADO:")
-                    erroresAprovechados.filter { error -> error.fueAprovechado }.forEach { error ->
+                    appendLine("✅ ERRORES QUE DETECTASTE BIEN:")
+                    erroresAprovechados.filter { it.fueAprovechado }.forEach { error ->
                         appendLine("• ${error.tipo}")
                     }
                     appendLine()
                 }
-            }
-            
-            if (falaciasUsuario > 0) {
-                appendLine("🔍 TUS FALACIAS:")
-                appendLine("Se detectaron $falaciasUsuario posible(s) falacia(s) en tus argumentos.")
+            } else {
+                appendLine("En este debate no hubo errores intencionales.")
                 appendLine()
             }
             
-            appendLine("💪 SIGUE PRACTICANDO:")
-            appendLine("El pensamiento crítico se desarrolla con la práctica constante.")
-            appendLine("En debates de nivel ${config?.nivelDificultad?.nombre ?: "N/A"}, la IA comete aproximadamente ${config?.porcentajeErroresIntencionales() ?: 0}% de errores intencionales.")
-            appendLine("Tu objetivo es detectarlos y cuestionarlos para mejorar tus habilidades analíticas.")
+            // Análisis de falacias del usuario
+            appendLine("🔍 TU LÓGICA ARGUMENTATIVA")
+            if (falaciasUsuario > 0) {
+                appendLine("⚠️ Detecté $falaciasUsuario posible(s) falacia(s) en tus argumentos.")
+                appendLine("Esto debilita la solidez de tu posición. Revisa la sección de falacias.")
+            } else {
+                appendLine("✅ No detecté falacias lógicas en tus argumentos. ¡Excelente!")
+            }
+            appendLine()
+            
+            // Mensaje motivacional final
+            appendLine("💡 RECOMENDACIÓN FINAL")
+            appendLine("El pensamiento crítico se perfecciona con la práctica constante.")
+            appendLine("Cada debate es una oportunidad para mejorar tu capacidad analítica.")
+            appendLine()
+            appendLine("En nivel ${config?.nivelDificultad?.nombre ?: "N/A"}, cometí aproximadamente")
+            appendLine("${config?.porcentajeErroresIntencionales() ?: 0}% de errores intencionales.")
+            appendLine("Tu objetivo: detectarlos TODOS y cuestionarlos con evidencia.")
+            appendLine()
+            appendLine("¡Sigue practicando! 💪")
         }
     }
 }
