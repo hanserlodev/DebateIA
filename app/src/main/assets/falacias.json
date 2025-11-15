@@ -1,0 +1,62 @@
+{
+  "taxonomy_name": "Falacias Comunes en Debate Argumentativo",
+  "version": "1.0",
+  "falacias_list": [
+    {
+      "code": "AD_HOMINEM",
+      "name": "Ad Hominem (Ataque Personal)",
+      "type": "Falacia de Relevancia",
+      "description": "Atacar a la persona que presenta el argumento en lugar de refutar el argumento en sí. Desvía la atención del mérito de la idea.",
+      "keywords_detection": ["tú no puedes hablar", "eres un hipócrita", "por tu pasado", "eso lo dice alguien como tú"]
+    },
+    {
+      "code": "AD_VERECUNDIAM",
+      "name": "Apelación a la Autoridad",
+      "type": "Falacia de Relevancia",
+      "description": "Defender una posición solo porque una figura de autoridad (o una celebridad) lo dice, sin presentar evidencia o lógica propia para el argumento. La autoridad no es experta en el tema.",
+      "keywords_detection": ["Elon Musk dijo", "mi profesor asegura", "como dice el experto X (sin citar argumento)", "porque es una persona exitosa"]
+    },
+    {
+      "code": "STRAW_MAN",
+      "name": "Hombre de Paja (Straw Man)",
+      "type": "Falacia de Relevancia",
+      "description": "Caricaturizar o distorsionar el argumento del oponente para que sea más fácil de atacar. Se refuta una versión débil y falsa del argumento original.",
+      "keywords_detection": ["así que lo que quieres es", "entonces estás diciendo que todos deberíamos", "si te entiendo bien, quieres caos total"]
+    },
+    {
+      "code": "BANDWAGON",
+      "name": "Ad Populum (Apelación a la Popularidad)",
+      "type": "Falacia de Relevancia",
+      "description": "Sostener que una idea es verdadera o correcta porque es popular o la mayoría de la gente la apoya.",
+      "keywords_detection": ["todo el mundo lo hace", "la mayoría de la gente piensa", "si fuera malo, ya lo habríamos quitado"]
+    },
+    {
+      "code": "FALSE_CAUSE",
+      "name": "Falsa Causa (Post hoc ergo propter hoc)",
+      "type": "Falacia de Inducción Débil",
+      "description": "Asumir que, debido a que un evento ocurrió después de otro, el primer evento debe haber sido la causa del segundo.",
+      "keywords_detection": ["después de que se hizo X, pasó Y", "desde que implementaron la ley, hemos visto más problemas", "la causa es simple: ocurrió primero"]
+    },
+    {
+      "code": "CIRCULAR_REASONING",
+      "name": "Razonamiento Circular (Petitio Principii)",
+      "type": "Falacia de Presuposición",
+      "description": "La conclusión se asume o se incluye en una de las premisas. El argumento se repite a sí mismo sin proveer evidencia externa.",
+      "keywords_detection": ["es verdad porque lo dice la Biblia, y la Biblia es verdad porque fue inspirada por Dios", "funciona porque es eficiente, y es eficiente porque funciona"]
+    },
+    {
+      "code": "SLIPPERY_SLOPE",
+      "name": "Pendiente Resbaladiza",
+      "type": "Falacia de Presuposición",
+      "description": "Argumentar que una acción inicial llevará inevitablemente a una cadena de eventos catastróficos o indeseables, sin ofrecer prueba de esa inevitabilidad.",
+      "keywords_detection": ["si permitimos esto, pronto permitiremos todo", "es el primer paso hacia el totalitarismo", "una vez que empieces, no podrás parar"]
+    },
+    {
+      "code": "RED_HERRING",
+      "name": "Pista Falsa (Red Herring)",
+      "type": "Falacia de Relevancia",
+      "description": "Introducir un tema irrelevante o secundario para desviar la atención del tema principal del debate.",
+      "keywords_detection": ["pero hablemos de lo realmente importante", "lo que es injusto es que en vez de esto", "el verdadero problema es la corrupción generalizada"]
+    }
+  ]
+}

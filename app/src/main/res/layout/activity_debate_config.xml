@@ -1,0 +1,504 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    tools:context=".DebateConfigActivity">
+
+    <!-- AppBar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        app:elevation="0dp">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/transparent"
+            app:navigationIcon="@drawable/ic_close"
+            app:navigationIconTint="?attr/colorOnSurface"
+            app:titleTextColor="?attr/colorOnSurface" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Contenido principal -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="24dp"
+            android:paddingBottom="100dp">
+
+            <!-- Header -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:paddingVertical="32dp">
+
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/icon"
+                    android:scaleType="fitCenter"
+                    android:layout_marginBottom="16dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Configura tu debate"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurface"
+                    android:layout_marginBottom="8dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Personaliza la experiencia de debate según tus preferencias"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_secondary"
+                    android:gravity="center"
+                    android:paddingHorizontal="32dp" />
+
+            </LinearLayout>
+
+            <!-- Tema del debate -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/surface"
+                app:cardElevation="0dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="#E5E5E5"
+                app:cardCornerRadius="16dp"
+                android:layout_marginBottom="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Tema del debate"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorOnSurface"
+                        android:layout_marginBottom="12dp" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilTema"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Escribe el tema a debatir"
+                        app:boxBackgroundMode="filled"
+                        app:boxBackgroundColor="#F7F7F8"
+                        app:boxStrokeWidth="0dp"
+                        app:boxStrokeWidthFocused="2dp"
+                        app:boxCornerRadiusTopStart="12dp"
+                        app:boxCornerRadiusTopEnd="12dp"
+                        app:boxCornerRadiusBottomStart="12dp"
+                        app:boxCornerRadiusBottomEnd="12dp"
+                        app:hintTextColor="@color/text_secondary">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etTema"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textCapSentences|textMultiLine"
+                            android:maxLines="3"
+                            android:textSize="15sp"
+                            android:textColor="@color/text_primary"
+                            android:background="@color/input_background"
+                            android:hint="Ej: La minería en Huancayo" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Nivel de dificultad -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/surface"
+                app:cardElevation="0dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="#E5E5E5"
+                app:cardCornerRadius="16dp"
+                android:layout_marginBottom="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Nivel de dificultad"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorOnSurface"
+                        android:layout_marginBottom="12dp" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chipGroupDificultad"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:singleSelection="true"
+                        app:selectionRequired="true"
+                        app:chipSpacingHorizontal="8dp">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipBasico"
+                            style="@style/Widget.Material3.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:text="Básico"
+                            android:textSize="14sp"
+                            android:textColor="@color/chip_text_selector"
+                            android:checked="true"
+                            app:chipCornerRadius="24dp"
+                            app:chipBackgroundColor="@color/chip_background_selector"
+                            app:chipStrokeWidth="1dp"
+                            app:chipStrokeColor="@color/chip_stroke_selector" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipIntermedio"
+                            style="@style/Widget.Material3.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:text="Intermedio"
+                            android:textSize="14sp"
+                            android:textColor="@color/chip_text_selector"
+                            app:chipCornerRadius="24dp"
+                            app:chipBackgroundColor="@color/chip_background_selector"
+                            app:chipStrokeWidth="1dp"
+                            app:chipStrokeColor="@color/chip_stroke_selector" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipAvanzado"
+                            style="@style/Widget.Material3.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:text="Avanzado"
+                            android:textSize="14sp"
+                            android:textColor="@color/chip_text_selector"
+                            app:chipCornerRadius="24dp"
+                            app:chipBackgroundColor="@color/chip_background_selector"
+                            app:chipStrokeWidth="1dp"
+                            app:chipStrokeColor="@color/chip_stroke_selector" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipExperto"
+                            style="@style/Widget.Material3.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:text="Experto"
+                            android:textSize="14sp"
+                            android:textColor="@color/chip_text_selector"
+                            app:chipCornerRadius="24dp"
+                            app:chipBackgroundColor="@color/chip_background_selector"
+                            app:chipStrokeWidth="1dp"
+                            app:chipStrokeColor="@color/chip_stroke_selector" />
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Postura del usuario -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/surface"
+                app:cardElevation="0dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="#E5E5E5"
+                app:cardCornerRadius="16dp"
+                android:layout_marginBottom="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Tu postura"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorOnSurface"
+                        android:layout_marginBottom="12dp" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chipGroupPostura"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:singleSelection="true"
+                        app:selectionRequired="true"
+                        app:chipSpacingHorizontal="8dp"
+                        android:layout_marginBottom="12dp">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipAFavor"
+                            style="@style/Widget.Material3.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:text="A favor"
+                            android:textSize="14sp"
+                            android:textColor="@color/chip_text_selector"
+                            android:checked="true"
+                            app:chipCornerRadius="24dp"
+                            app:chipBackgroundColor="@color/chip_background_selector"
+                            app:chipStrokeWidth="1dp"
+                            app:chipStrokeColor="@color/chip_stroke_selector" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipEnContra"
+                            style="@style/Widget.Material3.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:text="En contra"
+                            android:textSize="14sp"
+                            android:textColor="@color/chip_text_selector"
+                            app:chipCornerRadius="24dp"
+                            app:chipBackgroundColor="@color/chip_background_selector"
+                            app:chipStrokeWidth="1dp"
+                            app:chipStrokeColor="@color/chip_stroke_selector" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipNeutral"
+                            style="@style/Widget.Material3.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:text="Neutral"
+                            android:textSize="14sp"
+                            android:textColor="@color/chip_text_selector"
+                            app:chipCornerRadius="24dp"
+                            app:chipBackgroundColor="@color/chip_background_selector"
+                            app:chipStrokeWidth="1dp"
+                            app:chipStrokeColor="@color/chip_stroke_selector" />
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                    <!-- Indicador de postura IA -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:background="#F0F9FF"
+                        android:padding="12dp"
+                        android:gravity="center_vertical"
+                        app:cornerRadius="12dp">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="🤖"
+                            android:textSize="20sp"
+                            android:gravity="center"
+                            android:layout_marginEnd="8dp" />
+
+                        <TextView
+                            android:id="@+id/tvPosturaIA"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="5"
+                            android:text="La IA tomará la postura EN CONTRA"
+                            android:textSize="13sp"
+                            android:textColor="#0369A1"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Quién comienza -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/surface"
+                app:cardElevation="0dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="#E5E5E5"
+                app:cardCornerRadius="16dp"
+                android:layout_marginBottom="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="¿Quién comienza?"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorOnSurface"
+                        android:layout_marginBottom="12dp" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chipGroupQuienEmpieza"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:singleSelection="true"
+                        app:selectionRequired="true"
+                        app:chipSpacingHorizontal="8dp">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipUsuarioEmpieza"
+                            style="@style/Widget.Material3.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:text="Yo empiezo"
+                            android:textSize="14sp"
+                            android:textColor="@color/chip_text_selector"
+                            android:checked="true"
+                            app:chipCornerRadius="24dp"
+                            app:chipBackgroundColor="@color/chip_background_selector"
+                            app:chipStrokeWidth="1dp"
+                            app:chipStrokeColor="@color/chip_stroke_selector" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipIAEmpieza"
+                            style="@style/Widget.Material3.Chip.Filter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:text="La IA empieza"
+                            android:textSize="14sp"
+                            android:textColor="@color/chip_text_selector"
+                            app:chipCornerRadius="24dp"
+                            app:chipBackgroundColor="@color/chip_background_selector"
+                            app:chipStrokeWidth="1dp"
+                            app:chipStrokeColor="@color/chip_stroke_selector" />
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Número de sets -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/surface"
+                app:cardElevation="0dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="#E5E5E5"
+                app:cardCornerRadius="16dp"
+                android:layout_marginBottom="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Número de sets"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="?attr/colorOnSurface"
+                        android:layout_marginBottom="8dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Un set incluye: Presentación de idea → Refutación → Apelación"
+                        android:textSize="13sp"
+                        android:textColor="@color/text_secondary"
+                        android:layout_marginBottom="16dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnDecrementSets"
+                            style="@style/Widget.Material3.Button.IconButton.Outlined"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:text="-"
+                            android:textSize="20sp"
+                            app:cornerRadius="12dp" />
+
+                        <TextView
+                            android:id="@+id/tvNumeroSets"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="2 sets"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="?attr/colorOnSurface"
+                            android:gravity="center"
+                            android:padding="16dp" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnIncrementSets"
+                            style="@style/Widget.Material3.Button.IconButton.Outlined"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:text="+"
+                            android:textSize="20sp"
+                            app:cornerRadius="12dp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Botón flotante -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnComenzarDebate"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_gravity="bottom"
+        android:layout_margin="24dp"
+        android:text="Comenzar debate"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textAllCaps="false"
+        app:cornerRadius="28dp"
+        app:icon="@android:drawable/ic_media_play"
+        app:iconGravity="textStart"
+        app:iconPadding="8dp"
+        style="@style/Widget.Material3.Button" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

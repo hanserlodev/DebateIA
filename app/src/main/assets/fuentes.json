@@ -1,0 +1,99 @@
+{
+  "context_control": {
+    "search_scope": "academic_and_verified_news",
+    "search_depth_limit": 5,
+    "language_filter": "es"
+  },
+  "trusted_repositories": [
+    {
+      "name": "Fuentes Académicas y Gubernamentales",
+      "urls": [
+        "*.gob.pe/*",
+        "*.edu.pe/*",
+        "scielo.org/*",
+        "jstor.org/*",
+        "dialnet.unirioja.es/*",
+        "redalyc.org/*",
+        "inei.gob.pe/*",
+        "bcrp.gob.pe/*"
+      ],
+      "description": "Incluye dominios gubernamentales, educativos y repositorios de investigación científica."
+    },
+    {
+      "name": "Organizaciones Internacionales",
+      "urls": [
+        "oas.org/*",
+        "un.org/*",
+        "worldbank.org/*",
+        "who.int/*",
+        "imf.org/*",
+        "cepal.org/*",
+        "ilo.org/*",
+        "oecd.org/*"
+      ],
+      "description": "Información estadística y regulatoria de entidades supranacionales."
+    }
+  ],
+  "blacklist_urls": [
+    {
+      "url": "wikipedia.org/*",
+      "reason": "Evitar fuentes de edición abierta sin revisión académica rigurosa."
+    },
+    {
+      "url": "*.blog/*",
+      "reason": "Filtrar dominios genéricos de blog sin verificación editorial."
+    },
+    {
+      "url": "forosdeopinion.com/*",
+      "reason": "Evitar foros y plataformas de opinión sin rigor periodístico."
+    },
+    {
+      "url": "medium.com/*",
+      "reason": "Evitar contenido de blogueo sin revisión de pares."
+    },
+    {
+      "url": "facebook.com/*",
+      "reason": "Evitar redes sociales con contenido no verificado."
+    },
+    {
+      "url": "twitter.com/*",
+      "reason": "Evitar plataformas de microblogging sin verificación sistemática."
+    },
+    {
+      "url": "x.com/*",
+      "reason": "Evitar plataformas de microblogging sin verificación sistemática."
+    },
+    {
+      "url": "instagram.com/*",
+      "reason": "Evitar redes sociales con contenido mayormente visual y sin rigor."
+    },
+    {
+      "url": "tiktok.com/*",
+      "reason": "Evitar plataformas de contenido viral sin verificación."
+    },
+    {
+      "url": "youtube.com/*",
+      "reason": "Evitar videos sin revisión editorial formal, salvo canales institucionales verificados."
+    },
+    {
+      "url": "*.blogspot.com/*",
+      "reason": "Evitar blogs personales sin respaldo institucional."
+    },
+    {
+      "url": "*.wordpress.com/*",
+      "reason": "Evitar blogs personales sin verificación editorial."
+    }
+  ],
+  "api_endpoint_config": {
+    "model": "gemini-2.5-flash",
+    "tool_settings": {
+      "google_search": {
+        "enabled": true,
+        "use_context_injection": true,
+        "trusted_search_filter": true,
+        "apply_blacklist": true,
+        "prioritize_trusted_sources": true
+      }
+    }
+  }
+}
