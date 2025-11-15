@@ -418,29 +418,40 @@ class ChatViewModel(
         
         viewModelScope.launch {
             try {
+                android.util.Log.d("ChatViewModel", "=== INICIANDO ANÁLISIS DE DEBATE ===")
+                android.util.Log.d("ChatViewModel", "Mensajes del usuario: ${mensajesUsuarioDebate.size}")
+                android.util.Log.d("ChatViewModel", "Errores intencionales cometidos: ${erroresIntencionalesCometidos.size}")
+                
                 // Analizar aprovechamiento de errores intencionales
                 val erroresAprovechados = analizarAprovechamientoErrores()
+                android.util.Log.d("ChatViewModel", "Errores analizados: ${erroresAprovechados.size}")
                 
                 // Detectar falacias en los mensajes del usuario
+                android.util.Log.d("ChatViewModel", "Iniciando detección de falacias...")
                 val falaciasDetectadas = mutableListOf<com.hanserlod.debateia.data.model.FalaciaDetectada>()
                 mensajesUsuarioDebate.forEachIndexed { index, mensaje ->
+                    android.util.Log.d("ChatViewModel", "Analizando mensaje ${index + 1}: ${mensaje.take(50)}...")
                     val falacias = falaciasManager.detectarFalacias(mensaje)
+                    android.util.Log.d("ChatViewModel", "Falacias encontradas en mensaje ${index + 1}: ${falacias.size}")
+                    
                     falacias.forEach { (codigoFalacia, keyword) ->
                         // Obtener detalles completos de la falacia
                         val falaciaInfo = falaciasManager.obtenerFalacia(codigoFalacia)
                         if (falaciaInfo != null) {
+                            android.util.Log.d("ChatViewModel", "Falacia detectada: ${falaciaInfo.name} por keyword: $keyword")
                             falaciasDetectadas.add(
                                 com.hanserlod.debateia.data.model.FalaciaDetectada(
                                     code = falaciaInfo.code,
                                     name = falaciaInfo.name,
                                     type = falaciaInfo.type,
                                     mensajeUsuario = mensaje.take(100) + if (mensaje.length > 100) "..." else "",
-                                    explicacion = "Detectada por la palabra clave: '$keyword' en el mensaje ${index + 1}"
+                                    explicacion = falaciaInfo.description
                                 )
                             )
                         }
                     }
                 }
+                android.util.Log.d("ChatViewModel", "Total falacias detectadas: ${falaciasDetectadas.size}")
                 
                 // Crear análisis simple basado en conteo y detección
                 val totalMensajes = mensajesUsuarioDebate.size
@@ -552,6 +563,14 @@ class ChatViewModel(
                     erroresIntencionales = erroresAprovechados,
                     retroalimentacion = retroalimentacion
                 )
+                
+                android.util.Log.d("ChatViewModel", "=== ANÁLISIS GENERADO ===")
+                android.util.Log.d("ChatViewModel", "Puntuación: $puntuacionGeneral")
+                android.util.Log.d("ChatViewModel", "Falacias: ${falaciasDetectadas.size}")
+                android.util.Log.d("ChatViewModel", "Errores intencionales: ${erroresAprovechados.size}")
+                android.util.Log.d("ChatViewModel", "Errores detectados: ${erroresAprovechados.count { it.fueAprovechado }}")
+                android.util.Log.d("ChatViewModel", "Recomendaciones: ${recomendaciones.size}")
+                android.util.Log.d("ChatViewModel", "Retroalimentación length: ${retroalimentacion.length}")
                 
                 _analisisDebate.value = analisis
                 _isLoading.value = false

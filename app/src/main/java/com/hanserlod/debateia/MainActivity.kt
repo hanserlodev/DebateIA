@@ -564,6 +564,12 @@ class MainActivity : AppCompatActivity() {
      * Muestra el diálogo con el análisis completo del debate
      */
     private fun mostrarDialogoResultados(config: DebateConfig, analisis: AnalisisDebate) {
+        android.util.Log.d("MainActivity", "=== MOSTRANDO RESULTADOS ===")
+        android.util.Log.d("MainActivity", "Puntuación: ${analisis.puntuacionGeneral}")
+        android.util.Log.d("MainActivity", "Falacias: ${analisis.falaciasDetectadas.size}")
+        android.util.Log.d("MainActivity", "Errores: ${analisis.erroresIntencionales.size}")
+        android.util.Log.d("MainActivity", "Recomendaciones: ${analisis.recomendaciones.size}")
+        
         val dialogView = layoutInflater.inflate(R.layout.dialog_resultados_debate, null)
         
         // Referencias a las vistas
@@ -576,6 +582,8 @@ class MainActivity : AppCompatActivity() {
         val layoutErroresIntencionales = dialogView.findViewById<android.widget.LinearLayout>(R.id.layoutErroresIntencionales)
         val tvRetroalimentacion = dialogView.findViewById<android.widget.TextView>(R.id.tvRetroalimentacion)
         val btnCerrar = dialogView.findViewById<com.google.android.material.button.MaterialButton>(R.id.btnCerrar)
+        
+        android.util.Log.d("MainActivity", "Vistas inicializadas correctamente")
         
         // Configurar tema y puntuación general
         tvTemaDebate.text = "Tema: ${config.tema}"
@@ -590,6 +598,7 @@ class MainActivity : AppCompatActivity() {
         tvPuntuacionGeneral.setTextColor(colorPuntuacion)
         
         // Agregar métricas individuales
+        android.util.Log.d("MainActivity", "Agregando métricas...")
         agregarMetrica(layoutMetricas, "💬 Capacidad de Respuesta", analisis.capacidadRespuesta)
         if (config.debeValidarFuentes()) {
             agregarMetrica(layoutMetricas, "📚 Uso de Fuentes", analisis.usoFuentes)
@@ -599,35 +608,45 @@ class MainActivity : AppCompatActivity() {
         agregarMetrica(layoutMetricas, "🌊 Profundidad", analisis.profundidad)
         
         // Mostrar falacias detectadas
+        android.util.Log.d("MainActivity", "Procesando falacias: ${analisis.falaciasDetectadas.size}")
         if (analisis.falaciasDetectadas.isEmpty()) {
             tvSinFalacias.visibility = View.VISIBLE
             layoutFalacias.visibility = View.GONE
+            android.util.Log.d("MainActivity", "No hay falacias, mostrando mensaje positivo")
         } else {
             tvSinFalacias.visibility = View.GONE
             layoutFalacias.visibility = View.VISIBLE
+            android.util.Log.d("MainActivity", "Mostrando ${analisis.falaciasDetectadas.size} falacias")
             analisis.falaciasDetectadas.forEach { falacia ->
+                android.util.Log.d("MainActivity", "Agregando falacia: ${falacia.name}")
                 agregarFalacia(layoutFalacias, falacia)
             }
         }
         
         // Agregar recomendaciones
+        android.util.Log.d("MainActivity", "Agregando ${analisis.recomendaciones.size} recomendaciones")
         analisis.recomendaciones.forEach { recomendacion ->
             agregarRecomendacion(layoutRecomendaciones, recomendacion)
         }
         
         // Agregar errores intencionales (solo mostrar sección si hay errores)
+        android.util.Log.d("MainActivity", "Procesando errores intencionales: ${analisis.erroresIntencionales.size}")
         val seccionErrores = dialogView.findViewById<View>(R.id.tvTituloErrores).parent as android.view.ViewGroup
         if (analisis.erroresIntencionales.isEmpty()) {
             // Ocultar toda la sección si no hay errores
             seccionErrores.visibility = View.GONE
+            android.util.Log.d("MainActivity", "No hay errores intencionales, ocultando sección")
         } else {
             seccionErrores.visibility = View.VISIBLE
+            android.util.Log.d("MainActivity", "Mostrando ${analisis.erroresIntencionales.size} errores")
             analisis.erroresIntencionales.forEach { error ->
+                android.util.Log.d("MainActivity", "Agregando error: ${error.tipo}, aprovechado: ${error.fueAprovechado}")
                 agregarErrorIntencional(layoutErroresIntencionales, error)
             }
         }
         
         // Retroalimentación completa
+        android.util.Log.d("MainActivity", "Configurando retroalimentación: ${analisis.retroalimentacion.length} caracteres")
         tvRetroalimentacion.text = analisis.retroalimentacion
         
         // Crear y mostrar diálogo
